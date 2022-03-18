@@ -1,0 +1,15 @@
+.container {
+  width: 100%;
+  background: rgb(49, 133, 235);
+  padding: 14px;
+  border: 0;
+  border-radius: 5px;
+  margin: 0;
+}
+
+.text {
+  color: white;
+  font-weight: 700;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}

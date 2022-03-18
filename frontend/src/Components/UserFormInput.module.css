@@ -1,0 +1,41 @@
+.input {
+  width: 100%;
+  border: 1px solid rgb(213, 211, 211);
+  padding: 8px 10px;
+  border-radius: 5px;
+  outline: none;
+  font-size: 1rem;
+}
+
+.container {
+  width: 100%;
+  margin: 0 0 15px 0;
+}
+
+.label-span {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.input-container {
+  margin: 3px 0 0 0;
+  transition: 0.5s;
+}
+
+.input-container-focus {
+  border-radius: 5px;
+  box-shadow: 0px 0px 0px 2px rgb(77, 130, 211);
+}
+
+.message {
+  height: 1rem;
+  margin-top: 2px;
+}
+
+.message-text {
+  font-size: 0.8rem;
+  color: red;
+}
+
+@media screen and (min-width: 1024px) {
+}
