@@ -1,0 +1,26 @@
+.buttons {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.button button {
+  width: 50%;
+}
+
+.img {
+  height: 50px;
+  margin-right: 10px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.img img {
+  height: inherit
+}
+
+.author-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

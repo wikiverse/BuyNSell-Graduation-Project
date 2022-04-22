@@ -8,6 +8,7 @@ const Description = (props) => {
       </div>
       <div className={classes['text-div']}>
         <textarea
+          readOnly={props.readOnly}
           className={classes.text}
           value={props.value}
           onChange={props.onChange}

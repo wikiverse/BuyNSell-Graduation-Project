@@ -68,7 +68,7 @@ const SignIn = () => {
         setIsError(true);
         return;
       }
-      navigate('/home');
+      navigate('/');
     } catch (error) {
       console.error(error);
     }
@@ -103,6 +103,7 @@ const SignIn = () => {
             message={usernameMessage}
           />
           <UserFormInput
+            type="password"
             value={password}
             onChange={setPasswordHandler}
             label="Password"

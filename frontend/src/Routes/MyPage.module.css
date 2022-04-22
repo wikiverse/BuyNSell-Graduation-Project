@@ -1,0 +1,15 @@
+.img {
+  border-radius: 50%;
+  height: 150px;
+}
+
+.edit-button {
+  position: absolute;
+  background: rgb(255,255,255);
+  border-radius: 5px;
+  border: 1px solid black;
+  padding: 3px 5px 1px;
+  right: 5px;
+  bottom: 5px;
+  font-size: 1rem;
+}

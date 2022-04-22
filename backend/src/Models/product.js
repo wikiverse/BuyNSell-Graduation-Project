@@ -21,10 +21,10 @@ const ProductSchema = new mongoose.Schema({
   price: {
     type: Number,
   },
-  date: {
-    type: Date,
-  },
   isNegotiable: {
+    type: Boolean,
+  },
+  isSold: {
     type: Boolean,
   },
 });

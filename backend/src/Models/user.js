@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Product = require('./product');
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -19,6 +20,16 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  imgUrl: {
+    type: String,
+    required: false,
+  },
+  products: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product',
+    },
+  ],
 });
 
 module.exports = mongoose.model('User', UserSchema);

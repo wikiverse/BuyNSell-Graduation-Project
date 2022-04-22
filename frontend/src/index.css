@@ -54,5 +54,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f1faee;
+}
+
+img {
+  display: block;
 }

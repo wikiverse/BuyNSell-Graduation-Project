@@ -3,9 +3,37 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const User = require('../Models/user');
 const { isLoggedIn } = require('../Middleware/middleware');
-const user = require('../Models/user');
+const multer = require('multer');
 
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/');
+  },
+  filename: function (req, file, cb) {
+    cb(null, req.session.user_id + file.originalname);
+  },
+});
+
+upload = multer({ storage });
 const saltRounds = 9;
+
+router
+  .route('/profilepicture')
+  .post(upload.single('image'), async (req, res) => {
+    const { user_id } = req.session;
+    try {
+      const host = req.headers.host;
+      const imageUrl = req.protocol + '://' + host + '/' + req.file.path;
+      await User.findByIdAndUpdate(user_id, { imgUrl: imageUrl });
+      res
+        .setHeader('Content-Type', 'application/json')
+        .status(201)
+        .json({ imageUrl });
+    } catch (error) {
+      res.status(400);
+      console.log(error);
+    }
+  });
 
 router.route('/signup').post(async (req, res) => {
   try {
@@ -31,8 +59,9 @@ router.route('/signin').post(async (req, res) => {
     const user = await User.findOne({ username: username });
     const match = await bcrypt.compare(password, user.password);
     if (match) {
-      console.log(req.session);
       req.session.user_id = user._id;
+      req.session.username = user.username;
+      req.session.fullname = user.fullName;
       res.sendStatus(200);
     } else {
       res.sendStatus(401);
@@ -42,7 +71,17 @@ router.route('/signin').post(async (req, res) => {
   }
 });
 
-router.route('/userinfo').post(async (req, res) => {
+router.route('/signout').post((req, res) => {
+  req.session.destroy((error) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.status(200);
+    }
+  });
+});
+
+router.route('/userinfo').get(async (req, res) => {
   try {
     const { user_id } = req.session;
     const user = await User.findOne({ _id: user_id });
@@ -51,6 +90,7 @@ router.route('/userinfo').post(async (req, res) => {
         fullname: user.fullName,
         username: user.username,
         email: user.email,
+        imageUrl: user.imgUrl,
       });
     }
   } catch (error) {
@@ -59,7 +99,11 @@ router.route('/userinfo').post(async (req, res) => {
 });
 
 router.route('/issigned').get(isLoggedIn, async (req, res) => {
-  res.json({ status: 'logged' });
+  res.json({
+    status: 'logged',
+    username: req.session.username,
+    fullname: req.session.fullname,
+  });
 });
 
 router.route('/isemailavailable').post(async (req, res) => {

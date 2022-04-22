@@ -16,6 +16,7 @@ const UserFormInput = (props) => {
         }`}
       >
         <input
+          readOnly={props.readOnly}
           type={props.type}
           className={classes.input}
           value={props.value}

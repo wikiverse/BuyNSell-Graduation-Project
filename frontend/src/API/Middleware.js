@@ -11,12 +11,19 @@ export const IsSignedIn = () => {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-    }).then((response) => {
-      response.json().then(({ status }) => {
-        if (status === 'logged') navigate('/home');
-        else navigate('/signin');
+    })
+      .then((response) => {
+        response.json().then(({ status, username, fullname }) => {
+          if (status === 'logged') {
+            localStorage.setItem('username', username);
+            localStorage.setItem('fullname', fullname);
+            navigate('/');
+          } else navigate('/signin');
+        });
+      })
+      .catch((e) => {
+        navigate('/signin');
       });
-    });
   }, [navigate]);
 };
 
@@ -30,11 +37,18 @@ export const IsAuthenticated = () => {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-    }).then((response) => {
-      response.json().then(({ status }) => {
-        if (status === 'logged') return;
-        else navigate('/signin');
+    })
+      .then((response) => {
+        response.json().then(({ status, username, fullname }) => {
+          if (status === 'logged') {
+            localStorage.setItem('username', username);
+            localStorage.setItem('fullname', fullname);
+            return;
+          } else navigate('/signin');
+        });
+      })
+      .catch((e) => {
+        navigate('/signin');
       });
-    });
   }, [navigate]);
 };

@@ -1,6 +1,6 @@
-# Buy&Sell (Work in Progress)
+# Buy&Sell
 
-**Buy&Sell** is a full-stack web platform for secondhand marketplace.
+**Buy&Sell** is a full-stack web platform with a video chat for secondhand marketplace.
 
 # UI Screenshots
 
@@ -18,7 +18,7 @@ My profile Page
 # Tools Used
 
 - **Front-end:** React
-- **Back-end:** Express
+- **Back-end:** Express, Socket.io
 - **Database:** MongoDB
 
 # License
