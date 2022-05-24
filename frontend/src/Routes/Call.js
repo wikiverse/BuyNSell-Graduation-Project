@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import Peer from 'peerjs';
 import { SocketContext } from './Context';
 import Button from '../Components/Button';
@@ -8,7 +8,7 @@ const Call = () => {
   const { socket } = useContext(SocketContext);
   const myVideo = useRef();
   const peerVideo = useRef();
-  const [searchParams, setSeachParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const calleeusername = searchParams.get('calleeusername');
   const peerId = searchParams.get('peerId');
   const peerRef = useRef(null);

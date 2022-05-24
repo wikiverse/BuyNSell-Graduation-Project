@@ -43,6 +43,34 @@ const PostId = () => {
       })
       .catch((error) => console.log(error));
   }, []);
+
+  const setIsSoldHandler = async () => {
+    const response = await fetch(
+      `http://localhost:4001/product/${params.postId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ isSold: true }),
+      }
+    );
+  };
+
+  const deleteHandler = () => {
+    fetch(`http://localhost:4001/product/${params.postId}`, {
+      method: 'DELETE',
+    })
+      .then((response) => {
+        console.log(response);
+        navigate('/');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div
       style={{
@@ -99,32 +127,46 @@ const PostId = () => {
           </span>
           <label>{isNegotiable ? 'Yes' : 'No'}</label>
         </div>
-        <div className={classes.buttons}>
-          <Button
-            onClick={() => {
-              navigate(`/call/?calleeusername=${username}`);
-            }}
-            style={{ margin: '0 10px 0 0', background: 'rgb(34,139,34)' }}
-          >
-            <i
-              style={{ marginRight: '2px' }}
-              className="bi bi-telephone-forward-fill"
-            ></i>{' '}
-            Call
-          </Button>
-          <Button style={{ margin: '0 0 0 10px' }}>
-            <a
-              href={`mailto:${email}`}
-              style={{ textDecoration: 'none', color: 'rgb(255,255,255)' }}
+        {localStorage.getItem('username') === username ? (
+          <div className={classes.buttons}>
+            <Button onClick={setIsSoldHandler} style={{ margin: '0 10px 0 0' }}>
+              <i className="bi bi-cash-coin"></i> Sold?
+            </Button>
+            <Button
+              onClick={deleteHandler}
+              style={{ margin: '0 0 0 10px', background: '#e63946' }}
+            >
+              <i className="bi bi-trash3"></i> Delete
+            </Button>
+          </div>
+        ) : (
+          <div className={classes.buttons}>
+            <Button
+              onClick={() => {
+                navigate(`/call/?calleeusername=${username}`);
+              }}
+              style={{ margin: '0 10px 0 0', background: 'rgb(34,139,34)' }}
             >
               <i
                 style={{ marginRight: '2px' }}
-                className="bi bi-envelope-fill"
+                className="bi bi-telephone-forward-fill"
               ></i>{' '}
-              Email
-            </a>
-          </Button>
-        </div>
+              Call
+            </Button>
+            <Button style={{ margin: '0 0 0 10px' }}>
+              <a
+                href={`mailto:${email}`}
+                style={{ textDecoration: 'none', color: 'rgb(255,255,255)' }}
+              >
+                <i
+                  style={{ marginRight: '2px' }}
+                  className="bi bi-envelope-fill"
+                ></i>{' '}
+                Email
+              </a>
+            </Button>
+          </div>
+        )}
       </UserForm>
     </div>
   );
