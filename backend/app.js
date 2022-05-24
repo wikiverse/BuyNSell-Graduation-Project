@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const http = require('http');
@@ -9,21 +10,23 @@ const mongoose = require('mongoose');
 const userRoutes = require('./src/Routes/user');
 const productRoutes = require('./src/Routes/product');
 const MongoStore = require('connect-mongo');
+const cookies = require('cookie-parser');
 
-const port = 4001;
+const port = process.env.PORT || 4001;
 
-const mongodbUrl = 'mongodb://127.0.0.1:27017/buynsell';
-const connectDB = async () => {
-  try {
-    await mongoose.connect(mongodbUrl);
-    mongoose.connection.once('open', () =>
-      console.log('Mongodb connection success')
-    );
-  } catch (error) {
-    console.error(error);
-  }
-};
-connectDB();
+const mongodbUrl = !process.env.DB_URL || 'mongodb://127.0.0.1:27017/buynsell';
+app.set('trust proxy', 1);
+mongoose.connect(mongodbUrl, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+  console.log('Database connected');
+});
+app.use(cookies());
 app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -44,7 +47,6 @@ const sessionConfig = {
   resave: false,
   saveUninitialized: true,
   cookie: {
-    httpOnly: true,
     secure: false,
     expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
     maxAge: 1000 * 60 * 60 * 24 * 7,

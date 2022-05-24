@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { isSignedUrl } from './User';
 
 export const IsSignedIn = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    fetch('http://localhost:4001/user/issigned', {
+    fetch(isSignedUrl, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -14,6 +15,7 @@ export const IsSignedIn = () => {
     })
       .then((response) => {
         response.json().then(({ status, username, fullname }) => {
+          console.log(status);
           if (status === 'logged') {
             localStorage.setItem('username', username);
             localStorage.setItem('fullname', fullname);
@@ -30,7 +32,7 @@ export const IsSignedIn = () => {
 export const IsAuthenticated = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    fetch('http://localhost:4001/user/issigned', {
+    fetch(isSignedUrl, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -40,6 +42,7 @@ export const IsAuthenticated = () => {
     })
       .then((response) => {
         response.json().then(({ status, username, fullname }) => {
+          console.log(status);
           if (status === 'logged') {
             localStorage.setItem('username', username);
             localStorage.setItem('fullname', fullname);

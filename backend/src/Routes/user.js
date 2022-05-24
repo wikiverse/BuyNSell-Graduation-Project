@@ -59,9 +59,11 @@ router.route('/signin').post(async (req, res) => {
     const user = await User.findOne({ username: username });
     const match = await bcrypt.compare(password, user.password);
     if (match) {
+      console.log('userID: ', user._id);
       req.session.user_id = user._id;
       req.session.username = user.username;
       req.session.fullname = user.fullName;
+      console.log('match: ', req.session);
       res.sendStatus(200);
     } else {
       res.sendStatus(401);

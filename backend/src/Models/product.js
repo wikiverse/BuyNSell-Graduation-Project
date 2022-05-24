@@ -27,6 +27,13 @@ const ProductSchema = new mongoose.Schema({
   isSold: {
     type: Boolean,
   },
+  interest: {
+    type: String,
+  },
+  views: {
+    type: Number,
+    default: 0,
+  },
 });
 
 module.exports = mongoose.model('Product', ProductSchema);

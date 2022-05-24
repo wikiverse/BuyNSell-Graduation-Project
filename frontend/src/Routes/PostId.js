@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import UserForm from '../Components/UserForm';
 import UserFormInput from '../Components/UserFormInput';
@@ -6,7 +6,6 @@ import Description from '../Components/Description';
 import Button from '../Components/Button';
 import classes from './PostId.module.css';
 import { useNavigate } from 'react-router-dom';
-import { SocketContext } from './Context';
 
 const PostId = () => {
   const navigate = useNavigate();

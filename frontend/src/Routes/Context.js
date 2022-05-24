@@ -1,7 +1,8 @@
 import { io } from 'socket.io-client';
 import { createContext, useEffect, useState } from 'react';
+import { socketUrl } from '../API/User';
 
-const socket = io('http://localhost:4001', {});
+const socket = io(socketUrl, {});
 
 const SocketContext = createContext();
 
