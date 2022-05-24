@@ -14,7 +14,7 @@ const App = () => {
   const { callee, isReceiving, setIsReceiving } = useContext(SocketContext);
   const callHandler = () => {
     setIsReceiving(false);
-    navigate(`/call/${localStorage.getItem('username')}`);
+    navigate(`/call/?peerId=${callee.peerId}`);
   };
   return (
     <>

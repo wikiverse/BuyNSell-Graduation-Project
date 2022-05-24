@@ -12,7 +12,7 @@ const storage = multer.diskStorage({
   },
 });
 
-upload = multer({ storage });
+const upload = multer({ storage });
 
 router.route('/all').get(async (req, res) => {
   try {
@@ -42,11 +42,12 @@ router.route('/new').post(upload.single('image'), async (req, res) => {
       price,
       imageUrl,
       isSold: false,
-      date,
+      date: Date.now(),
     });
     await newProduct.save();
     res.sendStatus(201);
   } catch (error) {
+    console.log(error);
     res.status(400).json(error);
   }
 });

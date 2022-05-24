@@ -1,79 +1,86 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import Peer from 'simple-peer';
+import { useParams, useSearchParams } from 'react-router-dom';
+import Peer from 'peerjs';
 import { SocketContext } from './Context';
+import Button from '../Components/Button';
 
 const Call = () => {
-  const [streamData, setStreamData] = useState();
-  const video = useRef();
-  const calleeVideo = useRef();
-  const params = useParams();
-  const calleeUsername = params.username;
-  const username = localStorage.getItem('username');
-  const fullname = localStorage.getItem('fullname');
-  const { socket, callee } = useContext(SocketContext);
-  console.log(callee);
+  const { socket } = useContext(SocketContext);
+  const myVideo = useRef();
+  const peerVideo = useRef();
+  const [searchParams, setSeachParams] = useSearchParams();
+  const calleeusername = searchParams.get('calleeusername');
+  const peerId = searchParams.get('peerId');
+  const peerRef = useRef(null);
+  const [isAccepted, setIsAccepted] = useState(false);
   useEffect(() => {
-    navigator.mediaDevices
-      .getUserMedia({ video: true, audio: true })
-      .then((stream) => {
-        setStreamData(stream);
-        video.current.srcObject = stream;
-      });
-    if (calleeUsername !== username) {
-      const peer = new Peer({
-        initiator: true,
-        trickle: false,
-        stream: streamData,
-      });
-      peer.on('signal', (data) => {
+    const peer = new Peer();
+    peer.on('open', (id) => {
+      console.log(id);
+      if (calleeusername) {
+        console.log(calleeusername);
         socket.emit('call', {
-          callee: calleeUsername,
-          signalData: data,
-          caller: username,
-          name: fullname,
+          callee: calleeusername,
+          peerId: id,
+          caller: localStorage.getItem('username'),
+        });
+      }
+    });
+    peer.on('call', (call) => {
+      var getUserMedia =
+        navigator.getUserMedia ||
+        navigator.webkitGetUserMedia ||
+        navigator.mozGetUserMedia;
+
+      getUserMedia({ video: true, audio: true }, (mediaStream) => {
+        console.log('call received', call);
+        myVideo.current.srcObject = mediaStream;
+        call.answer(mediaStream);
+        call.on('stream', (remoteStream) => {
+          peerVideo.current.srcObject = remoteStream;
         });
       });
-      peer.on('stream', (streamData) => {
-        calleeVideo.current.srcObject = streamData;
-      });
-      socket.on('accept', (signal) => {
-        peer.signal(signal);
-      });
-    } else {
-      const peer = new Peer({
-        initiator: false,
-        trickle: false,
-        stream: streamData,
-      });
-      peer.on('signal', (data) => {
-        socket.emit('answer', { signal: data, caller: callee.caller });
-      });
-      peer.on('stream', (stream) => {
-        calleeVideo.current.srcObject = stream;
-      });
-
-      peer.signal(callee.signal);
-    }
+    });
+    peerRef.current = peer;
   }, []);
+  const answer = () => {
+    console.log(peerId);
+    setIsAccepted(true);
+    var getUserMedia =
+      navigator.getUserMedia ||
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia;
+    getUserMedia({ video: true, audio: true }, (mediaStream) => {
+      myVideo.current.srcObject = mediaStream;
+      const call = peerRef.current.call(peerId, mediaStream);
+      console.log('call', call);
+      call.on('stream', (remoteStream) => {
+        peerVideo.current.srcObject = remoteStream;
+      });
+    });
+  };
 
   return (
     <div>
+      {peerId && !isAccepted && (
+        <div>
+          <Button onClick={answer}>Answer</Button>
+        </div>
+      )}
       <div
         style={{ borderRadius: '30px', overflow: 'hidden', margin: '10px 0' }}
       >
         <video
           style={{ width: '100%' }}
-          ref={video}
+          ref={myVideo}
           playsInline
-          muted
           autoPlay
         ></video>
       </div>
       <div style={{ borderRadius: '30px', overflow: 'hidden' }}>
         <video
           style={{ width: '100%' }}
-          ref={calleeVideo}
+          ref={peerVideo}
           playsInline
           autoPlay
         ></video>

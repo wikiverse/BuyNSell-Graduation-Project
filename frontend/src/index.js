@@ -24,7 +24,7 @@ ReactDOM.render(
             <Route path="mypage" element={<MyPage />}></Route>
             <Route path="post" element={<Post />}></Route>
             <Route path="posts/:postId" element={<PostId />} />
-            <Route path="call/:username" element={<Call />} />
+            <Route path="call" element={<Call />} />
           </Route>
           <Route path="/signup" element={<SignUp />}></Route>
           <Route path="/signin" element={<SignIn />}></Route>

@@ -14,13 +14,11 @@ const ContextProvider = ({ children }) => {
       socket.emit('saveID', { id, username });
     });
     socket.on('call', (obj) => {
-      console.log('call');
-      console.log(obj);
       setCallee({
         caller: obj.caller,
-        signal: obj.signalData,
-        name: obj.name,
+        peerId: obj.peerId,
       });
+      console.log(obj);
       setIsReceiving(true);
     });
   }, []);

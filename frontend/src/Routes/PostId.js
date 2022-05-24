@@ -102,7 +102,7 @@ const PostId = () => {
         <div className={classes.buttons}>
           <Button
             onClick={() => {
-              navigate(`/call/${username}`);
+              navigate(`/call/?calleeusername=${username}`);
             }}
             style={{ margin: '0 10px 0 0', background: 'rgb(34,139,34)' }}
           >

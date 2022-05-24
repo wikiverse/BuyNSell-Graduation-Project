@@ -63,6 +63,7 @@ const io = require('socket.io')(server, {
 });
 
 const lookup = {};
+const peerIdRef = {};
 
 io.on('connection', (socket) => {
   console.log('connected');
@@ -70,6 +71,11 @@ io.on('connection', (socket) => {
   socket.on('saveID', ({ id, username }) => {
     console.log(id, username);
     lookup[username] = id;
+  });
+
+  socket.on('savePeerId', ({ peerId, username }) => {
+    console.log(peerId, username);
+    peerIdRef[username] = peerId;
   });
 
   socket.on('call', (obj) => {
