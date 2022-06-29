@@ -100,6 +100,23 @@ router.route('/userinfo').get(async (req, res) => {
   }
 });
 
+router.route('/userinfo:username').get(async (req, res) => {
+  try {
+    const { username } = req.params;
+    const user = await User.findOne({ username: username });
+    if (user) {
+      res.status(200).json({
+        fullname: user.fullName,
+        username: user.username,
+        email: user.email,
+        imageUrl: user.imgUrl,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 router.route('/issigned').get(isLoggedIn, async (req, res) => {
   res.json({
     status: 'logged',

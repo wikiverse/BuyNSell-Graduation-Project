@@ -13,6 +13,8 @@ import Post from './Routes/Post';
 import PostId from './Routes/PostId';
 import { ContextProvider } from './Routes/Context';
 import Call from './Routes/Call';
+import Search from './Routes/Search';
+import Match from './Routes/Match';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -25,6 +27,8 @@ ReactDOM.render(
             <Route path="post" element={<Post />}></Route>
             <Route path="posts/:postId" element={<PostId />} />
             <Route path="call" element={<Call />} />
+            <Route path="search" element={<Search />} />
+            <Route path="match" element={<Match />} />
           </Route>
           <Route path="/signup" element={<SignUp />}></Route>
           <Route path="/signin" element={<SignIn />}></Route>

@@ -30,6 +30,11 @@ const UserSchema = new mongoose.Schema({
       ref: 'Product',
     },
   ],
+  interests: [
+    {
+      type: String,
+    },
+  ],
 });
 
 module.exports = mongoose.model('User', UserSchema);

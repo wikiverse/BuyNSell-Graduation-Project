@@ -1,8 +1,9 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import Peer from 'peerjs';
 import { SocketContext } from './Context';
 import Button from '../Components/Button';
+import classes from './Call.module.css';
 
 const Call = () => {
   const { socket } = useContext(SocketContext);
@@ -13,10 +14,13 @@ const Call = () => {
   const peerId = searchParams.get('peerId');
   const peerRef = useRef(null);
   const [isAccepted, setIsAccepted] = useState(false);
+  const [myId, setMyId] = useState('');
+  const navigate = useNavigate();
   useEffect(() => {
     const peer = new Peer();
     peer.on('open', (id) => {
       console.log(id);
+      setMyId(id);
       if (calleeusername) {
         console.log(calleeusername);
         socket.emit('call', {
@@ -61,29 +65,66 @@ const Call = () => {
   };
 
   return (
-    <div>
-      {peerId && !isAccepted && (
-        <div>
-          <Button onClick={answer}>Answer</Button>
+    <div className={classes.container}>
+      <div style={{ width: '100%', position: 'relative' }}>
+        <div
+          style={{
+            borderRadius: '10px',
+            overflow: 'hidden',
+            margin: '10px 0',
+            position: 'absolute',
+            bottom: '10px',
+            right: '20px',
+          }}
+        >
+          <video
+            style={{ width: '20vw', maxWidth: '300px' }}
+            ref={myVideo}
+            playsInline
+            autoPlay
+            muted
+          ></video>
         </div>
-      )}
-      <div
-        style={{ borderRadius: '30px', overflow: 'hidden', margin: '10px 0' }}
-      >
-        <video
-          style={{ width: '100%' }}
-          ref={myVideo}
-          playsInline
-          autoPlay
-        ></video>
+        <div
+          style={{
+            borderRadius: '30px',
+            overflow: 'hidden',
+            maxWidth: '800px',
+          }}
+        >
+          <video
+            style={{ width: '100%', maxHeight: '800px' }}
+            ref={peerVideo}
+            playsInline
+            autoPlay
+          ></video>
+        </div>
       </div>
-      <div style={{ borderRadius: '30px', overflow: 'hidden' }}>
-        <video
-          style={{ width: '100%' }}
-          ref={peerVideo}
-          playsInline
-          autoPlay
-        ></video>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          width: '100%',
+          justifyContent: 'center',
+          marginTop: '50px',
+        }}
+      >
+        {peerId && !isAccepted && myId && (
+          <Button
+            style={{ width: '200px', marginRight: '20px' }}
+            onClick={answer}
+          >
+            Answer
+          </Button>
+        )}
+        <Button
+          onClick={() => {
+            navigate('/');
+          }}
+          style={{ width: '200px', backgroundColor: 'red' }}
+        >
+          Cancel
+        </Button>
       </div>
     </div>
   );

@@ -36,6 +36,21 @@
   padding: 0 20px;
 }
 
+.modal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.modal-div-img {
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.modal-container > div {
+  margin: 10px 0;
+}
+
 @media screen and (min-width: 600px) {
   .wrapper {
     height: 60px;

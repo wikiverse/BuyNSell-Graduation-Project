@@ -6,6 +6,7 @@ import Description from '../Components/Description';
 import Button from '../Components/Button';
 import classes from './PostId.module.css';
 import { useNavigate } from 'react-router-dom';
+import RecommendedItems from '../Components/RecommendedItems';
 
 const PostId = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const PostId = () => {
   const [username, setUsername] = useState('');
   const [profileImg, setProfileImg] = useState('');
   const [email, setEmail] = useState('');
+  const [recommendations, setRecommendations] = useState([]);
   let date = new Date();
   useEffect(() => {
     fetch(`http://localhost:4001/product/${params.postId}`, {
@@ -41,7 +43,18 @@ const PostId = () => {
         date = data.date;
       })
       .catch((error) => console.log(error));
-  }, []);
+    fetch(`http://127.0.0.1:5000/recommendations/${params.postId}`, {
+      method: 'GET',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        setRecommendations(response);
+      });
+  }, [params.postId]);
 
   const setIsSoldHandler = async () => {
     const response = await fetch(
@@ -166,6 +179,22 @@ const PostId = () => {
             </Button>
           </div>
         )}
+      </UserForm>
+      <UserForm
+        style={{ marginLeft: '40px', width: '300px' }}
+        title="Recommendations"
+      >
+        {recommendations.length === 0 && 'No recommendations for this item.'}
+        {recommendations.map((recommendation) => {
+          return (
+            <RecommendedItems
+              id={recommendation._id}
+              imgUrl={recommendation.imageUrl}
+              title={recommendation.title}
+              price={recommendation.price}
+            />
+          );
+        })}
       </UserForm>
     </div>
   );

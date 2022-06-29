@@ -6,22 +6,51 @@ import { IsAuthenticated } from './API/Middleware';
 import { signOutUrl } from './API/User';
 import { SocketContext } from './Routes/Context';
 import Modal from './Components/Modal';
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { userInfoUrl } from './API/User';
 
 const App = () => {
   const navigate = useNavigate();
   IsAuthenticated();
   const { callee, isReceiving, setIsReceiving } = useContext(SocketContext);
+  const [callerInfo, setCallerInfo] = useState({});
   const callHandler = () => {
     setIsReceiving(false);
     navigate(`/call/?peerId=${callee.peerId}`);
   };
+  useEffect(() => {
+    fetch(userInfoUrl + callee.caller, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log(response);
+        setCallerInfo(response);
+      });
+  }, [callee.caller]);
   return (
     <>
       {isReceiving && (
         <Modal>
-          <div>{callee.name} is calling.</div>
-          <Button onClick={callHandler}>Accept</Button>
+          <div
+            style={{ width: '400px' }}
+            className={classes['modal-container']}
+          >
+            <div className={classes['modal-div-img']}>
+              <img
+                style={{ height: '200px' }}
+                src={callerInfo.imageUrl}
+                alt="caller"
+              />
+            </div>
+            <div>{callerInfo.fullname} is calling.</div>
+            <Button onClick={callHandler}>Accept</Button>
+          </div>
         </Modal>
       )}
       <div className={classes.container}>

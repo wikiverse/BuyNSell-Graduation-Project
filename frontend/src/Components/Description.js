@@ -12,6 +12,7 @@ const Description = (props) => {
           className={classes.text}
           value={props.value}
           onChange={props.onChange}
+          placeholder={props.placeholder}
         ></textarea>
       </div>
     </div>

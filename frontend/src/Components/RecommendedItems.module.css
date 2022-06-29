@@ -1,0 +1,19 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0;
+}
+
+.left {
+  width: 70px;
+}
+
+.right {
+  width: 100%;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

@@ -93,6 +93,7 @@ const Post = () => {
             onChange={setDescriptionHandler}
             label="Description"
           />
+
           <div style={{ width: '100%', marginBottom: '10px' }}>
             <label>
               <span style={{ fontWeight: '600', marginRight: '10px' }}>
@@ -112,6 +113,15 @@ const Post = () => {
             <label>Yes</label>
             <input onChange={setIsNegotiableHandler} type="checkbox"></input>
           </div>
+          {/* <div style={{ width: '100%' }}>
+            <label htmlFor="interest">Select interest for the item: </label>
+            <select name="Interests" id="interest">
+              <option value="sports">Sports</option>
+              <option value="technology">Technology</option>
+              <option value="education">Education</option>
+              <option value="health">Health</option>
+            </select>
+          </div> */}
           <Button style={{ margin: '20px 0' }} onClick={formHandler}>
             Submit
           </Button>
